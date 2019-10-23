@@ -243,7 +243,7 @@ private
     elsif clear.is_a? Array
       send_keys(*clear, value)
     else
-      driver.execute_script 'arguments[0].select()', self unless clear == :none
+      driver.execute_script 'arguments[0].focus(); arguments[0].select()', self unless clear == :none
       send_keys(value)
     end
   end
