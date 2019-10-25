@@ -83,6 +83,22 @@ RSpec.shared_examples 'Capybara::Session' do |session, mode|
       end
     end
 
+    describe '#fill_in with no options' do
+      it 'should fill in a field, replacing an existing value' do
+        session.visit('/form')
+        session.fill_in('form_first_name',
+                        with: 'Harry')
+        expect(session.find(:fillable_field, 'form_first_name').value).to eq('Harry')
+      end
+
+      it 'should trigger focus' do
+        session.visit('/with_js')
+        expect(session).not_to have_css('#focus_event_triggered')
+        session.fill_in('with_focus_event', with: 'some value')
+        expect(session).to have_css('#focus_event_triggered')
+      end
+    end
+
     describe '#fill_in with { :clear => :backspace } fill_option', requires: [:js] do
       before do
         # Firefox has an issue with change events if the main window doesn't think it's focused
